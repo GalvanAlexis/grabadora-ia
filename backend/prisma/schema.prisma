@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Audio {
+  id                String           @id @default(uuid())
+  userId            String
+  fileName          String
+  originalS3Key     String
+  processedS3Key    String?
+  mimeType          String
+  fileSize          Int
+  duration          Float?
+  sampleRate        Int
+  channels          Int
+  processingStatus  ProcessingStatus @default(UPLOADED)
+  uploadedAt        DateTime         @default(now())
+  processedAt       DateTime?
+
+  transcription Transcription?
+  analysis      Analysis?
+  exports       Export[]
+
+  @@index([userId])
+  @@index([processingStatus])
+}
+
+enum ProcessingStatus {
+  UPLOADED
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model Transcription {
+  id           String   @id @default(uuid())
+  audioId      String   @unique
+  audio        Audio    @relation(fields: [audioId], references: [id], onDelete: Cascade)
+  segments     Json // Array of speaker segments
+  fullText     String
+  speakerCount Int
+  createdAt    DateTime @default(now())
+
+  @@index([audioId])
+}
+
+model Analysis {
+  id        String   @id @default(uuid())
+  audioId   String   @unique
+  audio     Audio    @relation(fields: [audioId], references: [id], onDelete: Cascade)
+  summary   Json // keyPoints, annotations, topics
+  tasks     Json // Array of extracted tasks
+  schema    Json // Hierarchical structure
+  createdAt DateTime @default(now())
+
+  @@index([audioId])
+}
+
+model Export {
+  id        String       @id @default(uuid())
+  audioId   String
+  audio     Audio        @relation(fields: [audioId], references: [id], onDelete: Cascade)
+  format    ExportFormat
+  cloudUrl  String
+  createdAt DateTime     @default(now())
+
+  @@index([audioId])
+  @@index([format])
+}
+
+enum ExportFormat {
+  JSON
+  TXT
+  MARKDOWN
+  SRT
+  VTT
+  CSV
+  XML
+  CONLL
+  EAF
+  HTML
+}
