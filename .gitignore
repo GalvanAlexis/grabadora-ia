@@ -42,6 +42,7 @@ prisma/migrations/**/migration.sql
 # Uploads
 uploads/
 *.tmp
+CARPETA1/
 
 # Mobile
 .expo/

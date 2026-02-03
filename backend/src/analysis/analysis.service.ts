@@ -85,7 +85,7 @@ Responde SOLO con el array JSON, sin texto adicional:`;
     let tasks = [];
     try {
       const tasksContent = tasksResponse.choices[0].message.content || '{}';
-      const tasksJson = JSON.parse(tasksContent);
+      const tasksJson = this.extractJson(tasksContent);
       tasks = tasksJson.tasks || tasksJson.items || [];
     } catch (e) {
       console.error('Error parsing tasks JSON:', e);
@@ -121,7 +121,7 @@ Responde SOLO con el array JSON, sin texto adicional:`;
     let schema = [];
     try {
       const schemaContent = schemaResponse.choices[0].message.content || '{}';
-      const schemaJson = JSON.parse(schemaContent);
+      const schemaJson = this.extractJson(schemaContent);
       schema = schemaJson.topics || schemaJson.schema || [];
     } catch (e) {
       console.error('Error parsing schema JSON:', e);
@@ -152,5 +152,40 @@ Responde SOLO con el array JSON, sin texto adicional:`;
         },
       },
     });
+  }
+
+  private extractJson(content: string): any {
+    try {
+      // 1. Try direct parse
+      return JSON.parse(content);
+    } catch (e) {
+      // 2. Try extracting from markdown code blocks
+      const jsonMatch =
+        content.match(/```json\n([\s\S]*?)\n```/) ||
+        content.match(/```\n([\s\S]*?)\n```/);
+
+      if (jsonMatch && jsonMatch[1]) {
+        try {
+          return JSON.parse(jsonMatch[1]);
+        } catch (e2) {
+          console.warn('Failed to parse JSON from code block:', e2);
+        }
+      }
+
+      // 3. Try finding the first '{' and last '}'
+      const firstBrace = content.indexOf('{');
+      const lastBrace = content.lastIndexOf('}');
+      if (firstBrace !== -1 && lastBrace !== -1) {
+        try {
+          return JSON.parse(content.substring(firstBrace, lastBrace + 1));
+        } catch (e3) {
+          console.warn('Failed to parse JSON from braces:', e3);
+        }
+      }
+
+      // Return empty object/array based on context if needed, or throw
+      // For this app, returning null/empty allows partial success
+      return {};
+    }
   }
 }

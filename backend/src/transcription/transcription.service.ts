@@ -38,24 +38,24 @@ export class TranscriptionService {
     const fileBlob = downloadResponse.result.fileBlob;
     const buffer = await fileBlob.arrayBuffer();
 
-    // Save temporarily
+    // Save temporarily (Async)
     const tempPath = `./uploads/temp-${audioId}.mp3`;
-    fs.writeFileSync(tempPath, Buffer.from(buffer));
+    await fs.promises.writeFile(tempPath, Buffer.from(buffer));
 
     try {
       // 3. Transcribe with Deepgram (with speaker diarization)
+      // Using ReadStream to reduce memory usage during read
+      const fileStream = fs.createReadStream(tempPath);
+
       const { result, error } =
-        await this.deepgram.listen.prerecorded.transcribeFile(
-          fs.readFileSync(tempPath),
-          {
-            model: 'nova-2',
-            smart_format: true,
-            diarize: true, // Enable speaker diarization
-            punctuate: true,
-            utterances: true,
-            language: 'es', // Spanish by default, can be made dynamic
-          },
-        );
+        await this.deepgram.listen.prerecorded.transcribeFile(fileStream, {
+          model: 'nova-2',
+          smart_format: true,
+          diarize: true, // Enable speaker diarization
+          punctuate: true,
+          utterances: true,
+          language: 'es', // Spanish by default, can be made dynamic
+        });
 
       if (error) {
         throw new Error(`Deepgram error: ${error.message}`);
@@ -97,13 +97,21 @@ export class TranscriptionService {
       });
 
       // 7. Clean up temp file
-      fs.unlinkSync(tempPath);
+      try {
+        await fs.promises.unlink(tempPath);
+      } catch (e) {
+        console.warn(`Failed to delete temp file ${tempPath}:`, e);
+      }
 
       return savedTranscription;
     } catch (error) {
       // Clean up on error
       if (fs.existsSync(tempPath)) {
-        fs.unlinkSync(tempPath);
+        try {
+          await fs.promises.unlink(tempPath);
+        } catch (e) {
+          console.warn(`Failed to delete temp file ${tempPath} on error:`, e);
+        }
       }
 
       // Update status to failed

@@ -6,10 +6,12 @@ import {
   UseInterceptors,
   UploadedFile,
   Body,
+  BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AudioService } from './audio.service';
 import { diskStorage } from 'multer';
+import { CreateAudioDto } from './dto/create-audio.dto';
 
 @Controller('audio')
 export class AudioController {
@@ -26,12 +28,26 @@ export class AudioController {
           cb(null, uniqueSuffix + '-' + file.originalname);
         },
       }),
+      limits: {
+        fileSize: 200 * 1024 * 1024, // 200MB limit
+      },
     }),
   )
   async uploadAudio(
     @UploadedFile() file: Express.Multer.File,
-    @Body('userId') userId: string,
+    @Body() createAudioDto: CreateAudioDto,
   ) {
+    const { userId } = createAudioDto;
+    console.log(`[AudioController] POST /upload received. userId: ${userId}`);
+
+    if (!file) {
+      throw new BadRequestException('File is required');
+    }
+
+    if (!userId) {
+      console.error('[AudioController] Missing userId in request body');
+      throw new BadRequestException('userId is required');
+    }
     return this.audioService.uploadAudio(file, userId);
   }
 
