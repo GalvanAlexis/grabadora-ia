@@ -1,0 +1,47 @@
+
+> backend@0.0.1 start:dev
+> nest start --watch
+
+[2J[3J[H[[90m02:05:51[0m] Starting compilation in watch mode...
+
+[[90m02:05:56[0m] Found 0 errors. Watching for file changes.
+
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:58 [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:58 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrismaModule dependencies initialized[39m[38;5;3m +63ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +37ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTranscriptionModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAnalysisModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mExportModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAudioModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/}:[39m[38;5;3m +57ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/, GET} route[39m[38;5;3m +3ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAudioController {/audio}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/audio/upload, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/audio/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mTranscriptionController {/transcription}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/transcription/:audioId, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/transcription/:audioId, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAnalysisController {/analysis}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/analysis/:audioId, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/analysis/:audioId, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mExportController {/export}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/export/:audioId/:format, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/export/:exportId, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/export/audio/:audioId, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 13516  - [39m03/02/2026, 02:05:59 [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +36ms[39m
+[AudioController] POST /upload received. userId: user123
+[AudioService] Starting upload process for userId: user123
+[AudioService] File metadata: {
+  originalname: 'test2.m4a',
+  mimetype: 'audio/x-m4a',
+  size: 25065540,
+  path: 'uploads\\1770138785547-104627891-test2.m4a'
+}
+[AudioService] Saving audio record to DB with path: uploads\1770138785547-104627891-test2.m4a
+[AudioService] DB record created with ID: d1729fd8-d493-4f99-a70b-7a9c2b950af5
+[TranscriptionService] Streaming file to Deepgram: uploads\1770138785547-104627891-test2.m4a
+[TranscriptionService] Transcription completed for ID: d1729fd8-d493-4f99-a70b-7a9c2b950af5
+[AnalysisService] Processing 1 chunks for audioId: d1729fd8-d493-4f99-a70b-7a9c2b950af5
+[AnalysisService] Summarizing chunk 1/1
+[AnalysisService] Extracting tasks from chunk 1/1
+[AnalysisService] Generating schema for chunk 1/1

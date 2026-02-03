@@ -1,0 +1,41 @@
+
+> backend@0.0.1 start:dev
+> nest start --watch
+
+[2J[3J[H[[90m01:48:34[0m] Starting compilation in watch mode...
+
+[96msrc/analysis/analysis.service.ts[0m:[93m34[0m:[93m19[0m - [91merror[0m[90m TS2345: [0mArgument of type 'string' is not assignable to parameter of type 'never'.
+
+[7m34[0m       chunks.push(fullText.substring(i, i + CHUNK_SIZE));
+[7m  [0m [91m                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96msrc/analysis/analysis.service.ts[0m:[93m60[0m:[93m29[0m - [91merror[0m[90m TS2345: [0mArgument of type 'string | null' is not assignable to parameter of type 'never'.
+  Type 'null' is not assignable to type 'never'.
+
+[7m60[0m       partialSummaries.push(response.choices[0].message.content);
+[7m  [0m [91m                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96msrc/analysis/analysis.service.ts[0m:[93m81[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
+
+[7m81[0m       finalSummary = response.choices[0].message.content;
+[7m  [0m [91m      ~~~~~~~~~~~~[0m
+
+[96msrc/analysis/analysis.service.ts[0m:[93m111[0m:[93m9[0m - [91merror[0m[90m TS2322: [0mType 'any[]' is not assignable to type 'never[]'.
+  Type 'any' is not assignable to type 'never'.
+
+[7m111[0m         allTasks = [...allTasks, ...chunkTasks];
+[7m   [0m [91m        ~~~~~~~~[0m
+
+[96msrc/analysis/analysis.service.ts[0m:[93m142[0m:[93m9[0m - [91merror[0m[90m TS2322: [0mType 'any[]' is not assignable to type 'never[]'.
+  Type 'any' is not assignable to type 'never'.
+
+[7m142[0m         fullSchema = [...fullSchema, ...chunkTopics];
+[7m   [0m [91m        ~~~~~~~~~~[0m
+
+[[90m01:48:40[0m] Found 5 errors. Watching for file changes.
+
+[2J[3J[H[[90m01:49:30[0m] File change detected. Starting incremental compilation...
+
+[[90m01:49:30[0m] Found 0 errors. Watching for file changes.
+

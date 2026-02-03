@@ -2,21 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { createClient } from '@deepgram/sdk';
 import * as fs from 'fs';
-import * as Dropbox from 'dropbox';
 
 @Injectable()
 export class TranscriptionService {
   private deepgram: ReturnType<typeof createClient>;
-  private dbx: Dropbox.Dropbox;
 
   constructor(private prisma: PrismaService) {
     // Initialize Deepgram client
     this.deepgram = createClient(process.env.DEEPGRAM_API_KEY);
-
-    // Initialize Dropbox
-    this.dbx = new Dropbox.Dropbox({
-      accessToken: process.env.DROPBOX_ACCESS_TOKEN,
-    });
   }
 
   async transcribeAudio(audioId: string) {
@@ -29,32 +22,35 @@ export class TranscriptionService {
       throw new Error('Audio not found');
     }
 
-    // 2. Download from Dropbox
-    const downloadResponse = await this.dbx.filesDownload({
-      path: audio.originalS3Key,
-    });
+    // 2. Validate Local File
+    const filePath = audio.originalS3Key; // This is now the local path (e.g. "uploads/...")
 
-    // @ts-ignore - Dropbox SDK types issue
-    const fileBlob = downloadResponse.result.fileBlob;
-    const buffer = await fileBlob.arrayBuffer();
-
-    // Save temporarily (Async)
-    const tempPath = `./uploads/temp-${audioId}.mp3`;
-    await fs.promises.writeFile(tempPath, Buffer.from(buffer));
+    if (!fs.existsSync(filePath)) {
+      console.error(
+        `[TranscriptionService] File not found at path: ${filePath}`,
+      );
+      await this.prisma.audio.update({
+        where: { id: audioId },
+        data: { processingStatus: 'FAILED' },
+      });
+      throw new Error(`File not found at path: ${filePath}`);
+    }
 
     try {
-      // 3. Transcribe with Deepgram (with speaker diarization)
-      // Using ReadStream to reduce memory usage during read
-      const fileStream = fs.createReadStream(tempPath);
+      // 3. Transcribe with Deepgram (Streaming from Disk)
+      console.log(
+        `[TranscriptionService] Streaming file to Deepgram: ${filePath}`,
+      );
+      const fileStream = fs.createReadStream(filePath);
 
       const { result, error } =
         await this.deepgram.listen.prerecorded.transcribeFile(fileStream, {
           model: 'nova-2',
           smart_format: true,
-          diarize: true, // Enable speaker diarization
+          diarize: true,
           punctuate: true,
           utterances: true,
-          language: 'es', // Spanish by default, can be made dynamic
+          language: 'es',
         });
 
       if (error) {
@@ -96,23 +92,16 @@ export class TranscriptionService {
         },
       });
 
-      // 7. Clean up temp file
-      try {
-        await fs.promises.unlink(tempPath);
-      } catch (e) {
-        console.warn(`Failed to delete temp file ${tempPath}:`, e);
-      }
+      console.log(
+        `[TranscriptionService] Transcription completed for ID: ${audioId}`,
+      );
+
+      // Note: We do NOT delete the file here anymore, as it is the master copy.
+      // If we want to save space later, we could add a cleanup job for old files.
 
       return savedTranscription;
     } catch (error) {
-      // Clean up on error
-      if (fs.existsSync(tempPath)) {
-        try {
-          await fs.promises.unlink(tempPath);
-        } catch (e) {
-          console.warn(`Failed to delete temp file ${tempPath} on error:`, e);
-        }
-      }
+      console.error(`[TranscriptionService] Transcription failed:`, error);
 
       // Update status to failed
       await this.prisma.audio.update({

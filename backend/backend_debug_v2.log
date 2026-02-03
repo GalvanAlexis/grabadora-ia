@@ -1,0 +1,156 @@
+
+> backend@0.0.1 start:dev
+> nest start --watch
+
+[2J[3J[H[[90m12:11:15[0m] Starting compilation in watch mode...
+
+[[90m12:11:20[0m] Found 0 errors. Watching for file changes.
+
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrismaModule dependencies initialized[39m[38;5;3m +23ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +6ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTranscriptionModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAnalysisModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mExportModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAudioModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/}:[39m[38;5;3m +34ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/, GET} route[39m[38;5;3m +4ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAudioController {/audio}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/audio/upload, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/audio/:id, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mTranscriptionController {/transcription}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/transcription/:audioId, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/transcription/:audioId, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAnalysisController {/analysis}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/analysis/:audioId, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/analysis/:audioId, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mExportController {/export}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/export/:audioId/:format, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/export/:exportId, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/export/audio/:audioId, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 8896  - [39m03/02/2026, 12:11:21 [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +5ms[39m
+[AudioController] POST /upload received. userId: user123
+[AudioService] Starting upload process for userId: user123
+[AudioService] File metadata: {
+  originalname: 'test1.m4a',
+  mimetype: 'audio/mp4',
+  size: 73046366,
+  path: 'uploads\\1770131913820-365263632-test1.m4a'
+}
+[AudioService] Attempting to upload to Dropbox at: /audios/1770131942550-test1.m4a
+[AudioService] Successfully read local file (async): uploads\1770131913820-365263632-test1.m4a
+[AudioService] Dropbox upload successful: /audios/1770131942550-test1.m4a
+[AudioService] Creating shared link for: /audios/1770131942550-test1.m4a
+[AudioService] Shared link created: https://www.dropbox.com/scl/fi/5uzzw21kzu2zlg3lxofay/1770131942550-test1.m4a?rlkey=ol38850vh8l49es32fup6k6c6&dl=0
+[AudioService] Saving audio record to DB for userId: user123
+[AudioService] DB record created with ID: 5e395225-60e6-49d6-b13b-38333c1bd986
+[AudioService] Cleaned up temp file: uploads\1770131913820-365263632-test1.m4a
+[Nest] 8896  - 03/02/2026, 12:19:17   ERROR [ExceptionsHandler] Error: Audio not found
+    at TranscriptionService.transcribeAudio (C:\Users\PC Blado\Desktop\AIDO\3-Proyectos\Grabadora_IA\backend\src\transcription\transcription.service.ts:29:13)
+    at async C:\Users\PC Blado\Desktop\AIDO\3-Proyectos\Grabadora_IA\backend\node_modules\@nestjs\core\router\router-execution-context.js:46:28
+    at async C:\Users\PC Blado\Desktop\AIDO\3-Proyectos\Grabadora_IA\backend\node_modules\@nestjs\core\router\router-proxy.js:9:17
+[2J[3J[H[[90m12:35:21[0m] File change detected. Starting incremental compilation...
+
+[[90m12:35:22[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m12:35:23[0m] File change detected. Starting incremental compilation...
+
+[[90m12:35:26[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m12:35:26[0m] File change detected. Starting incremental compilation...
+
+[[90m12:35:27[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m12:35:27[0m] File change detected. Starting incremental compilation...
+
+[[90m12:35:28[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m12:35:28[0m] File change detected. Starting incremental compilation...
+
+[[90m12:35:28[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m12:35:30[0m] File change detected. Starting incremental compilation...
+
+[[90m12:35:30[0m] Found 0 errors. Watching for file changes.
+
+[2J[3J[H[[90m12:35:30[0m] File change detected. Starting incremental compilation...
+
+[[90m12:35:31[0m] Found 0 errors. Watching for file changes.
+
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:32 [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrismaModule dependencies initialized[39m[38;5;3m +83ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +41ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTranscriptionModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAnalysisModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mExportModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAudioModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/}:[39m[38;5;3m +68ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/, GET} route[39m[38;5;3m +3ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAudioController {/audio}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/audio/upload, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/audio/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mTranscriptionController {/transcription}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/transcription/:audioId, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/transcription/:audioId, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAnalysisController {/analysis}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/analysis/:audioId, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/analysis/:audioId, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mExportController {/export}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/export/:audioId/:format, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/export/:exportId, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/export/audio/:audioId, GET} route[39m[38;5;3m +0ms[39m
+[2J[3J[H[[90m12:35:33[0m] File change detected. Starting incremental compilation...
+
+[32m[Nest] 18280  - [39m03/02/2026, 12:35:33 [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +35ms[39m
+[[90m12:35:33[0m] Found 0 errors. Watching for file changes.
+
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrismaModule dependencies initialized[39m[38;5;3m +29ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +3ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTranscriptionModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAnalysisModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mExportModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAudioModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/}:[39m[38;5;3m +35ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/, GET} route[39m[38;5;3m +3ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAudioController {/audio}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/audio/upload, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/audio/:id, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mTranscriptionController {/transcription}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/transcription/:audioId, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/transcription/:audioId, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAnalysisController {/analysis}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/analysis/:audioId, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/analysis/:audioId, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mExportController {/export}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/export/:audioId/:format, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/export/:exportId, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/export/audio/:audioId, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 1628  - [39m03/02/2026, 12:35:34 [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +3ms[39m
+[2J[3J[H[[90m12:35:40[0m] File change detected. Starting incremental compilation...
+
+[[90m12:35:40[0m] Found 0 errors. Watching for file changes.
+
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrismaModule dependencies initialized[39m[38;5;3m +28ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +3ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTranscriptionModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAnalysisModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mExportModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAudioModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAppController {/}:[39m[38;5;3m +37ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/, GET} route[39m[38;5;3m +2ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAudioController {/audio}:[39m[38;5;3m +1ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/audio/upload, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/audio/:id, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mTranscriptionController {/transcription}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/transcription/:audioId, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/transcription/:audioId, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAnalysisController {/analysis}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/analysis/:audioId, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/analysis/:audioId, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mExportController {/export}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/export/:audioId/:format, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/export/:exportId, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/export/audio/:audioId, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9000  - [39m03/02/2026, 12:35:42 [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +4ms[39m

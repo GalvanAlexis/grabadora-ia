@@ -27,114 +27,135 @@ export class AnalysisService {
 
     const fullText = transcription.fullText;
 
-    // 2. Generate summary
-    const summaryPrompt = `Analiza la siguiente transcripción y genera un resumen conciso y claro en español:
-
-Transcripción:
-${fullText}
-
-Resumen:`;
-
-    const summaryResponse = await this.groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
-      messages: [
-        {
-          role: 'system',
-          content:
-            'Eres un asistente experto en resumir conversaciones y reuniones. Genera resúmenes concisos, claros y en español.',
-        },
-        {
-          role: 'user',
-          content: summaryPrompt,
-        },
-      ],
-      temperature: 0.3,
-      max_tokens: 500,
-    });
-
-    const summary =
-      summaryResponse.choices[0].message.content ||
-      'No se pudo generar resumen';
-
-    // 3. Extract tasks/action items
-    const tasksPrompt = `Analiza la siguiente transcripción y extrae todas las tareas, acciones pendientes o compromisos mencionados. Devuelve SOLO un array JSON con objetos que tengan las propiedades: "task" (descripción de la tarea) y "assignee" (persona asignada, o "No especificado" si no se menciona).
-
-Transcripción:
-${fullText}
-
-Responde SOLO con el array JSON, sin texto adicional:`;
-
-    const tasksResponse = await this.groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
-      messages: [
-        {
-          role: 'system',
-          content:
-            'Eres un asistente que extrae tareas y acciones de conversaciones. Responde SOLO con JSON válido.',
-        },
-        {
-          role: 'user',
-          content: tasksPrompt,
-        },
-      ],
-      temperature: 0.2,
-      max_tokens: 1000,
-      response_format: { type: 'json_object' },
-    });
-
-    let tasks = [];
-    try {
-      const tasksContent = tasksResponse.choices[0].message.content || '{}';
-      const tasksJson = this.extractJson(tasksContent);
-      tasks = tasksJson.tasks || tasksJson.items || [];
-    } catch (e) {
-      console.error('Error parsing tasks JSON:', e);
-      tasks = [];
+    // Chunk size: ~20,000 chars to stay safe within Groq's 12k TPM (~48k chars)
+    const CHUNK_SIZE = 20000;
+    const chunks: string[] = [];
+    for (let i = 0; i < fullText.length; i += CHUNK_SIZE) {
+      chunks.push(fullText.substring(i, i + CHUNK_SIZE));
     }
 
-    // 4. Generate hierarchical schema
-    const schemaPrompt = `Analiza la siguiente transcripción y genera un esquema jerárquico de los temas principales y subtemas discutidos. Devuelve SOLO un array JSON con objetos que tengan: "topic" (tema principal), "subtopics" (array de subtemas), y "timestamp" (momento aproximado en la conversación, ej: "inicio", "medio", "final").
+    console.log(
+      `[AnalysisService] Processing ${chunks.length} chunks for audioId: ${audioId}`,
+    );
 
-Transcripción:
-${fullText}
+    // --- 1. GENERATE SUMMARY (Map-Reduce) ---
+    let partialSummaries: string[] = [];
+    for (const [index, chunk] of chunks.entries()) {
+      console.log(
+        `[AnalysisService] Summarizing chunk ${index + 1}/${chunks.length}`,
+      );
+      const response = await this.groq.chat.completions.create({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          {
+            role: 'system',
+            content:
+              'Eres un experto sintetizando información. Resume este fragmento de una transcripción.',
+          },
+          { role: 'user', content: chunk },
+        ],
+        temperature: 0.3,
+        max_tokens: 500,
+      });
+      const content = response.choices[0].message.content;
+      if (content) partialSummaries.push(content);
+    }
 
-Responde SOLO con el array JSON, sin texto adicional:`;
+    let finalSummary = '';
+    if (partialSummaries.length > 1) {
+      console.log(
+        `[AnalysisService] Generating final summary from ${partialSummaries.length} parts`,
+      );
+      const response = await this.groq.chat.completions.create({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          {
+            role: 'system',
+            content:
+              'Une los siguientes resúmenes parciales en un único resumen cohesionado y claro en español.',
+          },
+          { role: 'user', content: partialSummaries.join('\n\n') },
+        ],
+        temperature: 0.3,
+        max_tokens: 1000,
+      });
+      finalSummary =
+        response.choices[0].message.content ||
+        'No se pudo generar el resumen final';
+    } else {
+      finalSummary = partialSummaries[0] || 'No se pudo generar resumen';
+    }
 
-    const schemaResponse = await this.groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
-      messages: [
-        {
-          role: 'system',
-          content:
-            'Eres un asistente que organiza información en esquemas jerárquicos. Responde SOLO con JSON válido.',
-        },
-        {
-          role: 'user',
-          content: schemaPrompt,
-        },
-      ],
-      temperature: 0.3,
-      max_tokens: 1500,
-      response_format: { type: 'json_object' },
-    });
+    // --- 2. EXTRACT TASKS (Concatenation) ---
+    let allTasks: any[] = [];
+    for (const [index, chunk] of chunks.entries()) {
+      console.log(
+        `[AnalysisService] Extracting tasks from chunk ${index + 1}/${chunks.length}`,
+      );
+      const response = await this.groq.chat.completions.create({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          {
+            role: 'system',
+            content:
+              'Extrae tareas y compromisos. Responde SOLO con un JSON: {"tasks": [{"task": "desc", "assignee": "name"}]}',
+          },
+          { role: 'user', content: chunk },
+        ],
+        temperature: 0.1,
+        max_tokens: 800,
+        response_format: { type: 'json_object' },
+      });
 
-    let schema = [];
-    try {
-      const schemaContent = schemaResponse.choices[0].message.content || '{}';
-      const schemaJson = this.extractJson(schemaContent);
-      schema = schemaJson.topics || schemaJson.schema || [];
-    } catch (e) {
-      console.error('Error parsing schema JSON:', e);
-      schema = [];
+      try {
+        const content = response.choices[0].message.content || '{}';
+        const json = this.extractJson(content);
+        const chunkTasks = json.tasks || json.items || [];
+        allTasks = [...allTasks, ...chunkTasks];
+      } catch (e) {
+        console.error(`Error parsing tasks in chunk ${index}:`, e);
+      }
+    }
+
+    // --- 3. GENERATE SCHEMA (Concatenation) ---
+    let fullSchema: any[] = [];
+    for (const [index, chunk] of chunks.entries()) {
+      console.log(
+        `[AnalysisService] Generating schema for chunk ${index + 1}/${chunks.length}`,
+      );
+      const response = await this.groq.chat.completions.create({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          {
+            role: 'system',
+            content:
+              'Genera un esquema jerárquico. Responde SOLO con un JSON: {"topics": [{"topic": "name", "subtopics": [], "timestamp": "..."}]}',
+          },
+          { role: 'user', content: chunk },
+        ],
+        temperature: 0.2,
+        max_tokens: 1000,
+        response_format: { type: 'json_object' },
+      });
+
+      try {
+        const content = response.choices[0].message.content || '{}';
+        const json = this.extractJson(content);
+        const chunkTopics = json.topics || json.schema || [];
+        fullSchema = [...fullSchema, ...chunkTopics];
+      } catch (e) {
+        console.error(`Error parsing schema in chunk ${index}:`, e);
+      }
     }
 
     // 5. Save analysis to database
+    // FIX: Field 'hierarchicalSchema' renamed to 'schema' as per prisma file
     const analysis = await this.prisma.analysis.create({
       data: {
         audioId,
-        summary: summary,
-        tasks: tasks,
-        hierarchicalSchema: schema,
+        summary: finalSummary,
+        tasks: allTasks,
+        schema: fullSchema,
       } as any,
     });
 

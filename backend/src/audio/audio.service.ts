@@ -1,18 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import * as Dropbox from 'dropbox';
 import * as fs from 'fs';
 
 @Injectable()
 export class AudioService {
-  private dbx: Dropbox.Dropbox;
-
-  constructor(private prisma: PrismaService) {
-    // Initialize Dropbox client
-    this.dbx = new Dropbox.Dropbox({
-      accessToken: process.env.DROPBOX_ACCESS_TOKEN,
-    });
-  }
+  constructor(private prisma: PrismaService) {}
 
   async uploadAudio(file: Express.Multer.File, userId: string) {
     console.log(`[AudioService] Starting upload process for userId: ${userId}`);
@@ -29,111 +21,35 @@ export class AudioService {
     }
 
     try {
-      // 1. Upload to Dropbox
-      const fileName = `${Date.now()}-${file.originalname}`;
-      const dropboxPath = `/audios/${fileName}`;
+      // Direct Local Storage (Streaming Architecture)
+      // The file is already saved by Multer to 'file.path' (e.g. "uploads/timestamp-name.m4a")
+      // We just need to persist this path to the DB.
+
+      const localPath = file.path; // Store relative path
+
       console.log(
-        `[AudioService] Attempting to upload to Dropbox at: ${dropboxPath}`,
+        `[AudioService] Saving audio record to DB with path: ${localPath}`,
       );
 
-      let fileContent: Buffer;
-      try {
-        fileContent = await fs.promises.readFile(file.path);
-        console.log(
-          `[AudioService] Successfully read local file (async): ${file.path}`,
-        );
-      } catch (fsError) {
-        console.error(
-          `[AudioService] Failed to read local file at ${file.path}:`,
-          fsError,
-        );
-        throw fsError;
-      }
+      const audio = await this.prisma.audio.create({
+        data: {
+          userId,
+          fileName: file.originalname,
+          originalS3Key: localPath, // Using this field to store local path now
+          mimeType: file.mimetype,
+          fileSize: file.size,
+          sampleRate: 44100,
+          channels: 2,
+          processingStatus: 'UPLOADED',
+        },
+      });
 
-      let uploadResponse;
-      try {
-        uploadResponse = await this.dbx.filesUpload({
-          path: dropboxPath,
-          contents: fileContent,
-        });
-        console.log(
-          `[AudioService] Dropbox upload successful: ${uploadResponse.result.path_display}`,
-        );
-      } catch (dbxError) {
-        console.error(
-          `[AudioService] Dropbox upload failed. Error details:`,
-          JSON.stringify(dbxError, null, 2),
-        );
-        throw dbxError;
-      }
-
-      // 2. Create shared link
-      let sharedLinkResponse;
-      try {
-        console.log(
-          `[AudioService] Creating shared link for: ${uploadResponse.result.path_display}`,
-        );
-        sharedLinkResponse = await this.dbx.sharingCreateSharedLinkWithSettings(
-          {
-            path: uploadResponse.result.path_display || dropboxPath,
-          },
-        );
-        console.log(
-          `[AudioService] Shared link created: ${sharedLinkResponse.result.url}`,
-        );
-      } catch (sharingError) {
-        console.error(
-          `[AudioService] Failed to create shared link:`,
-          JSON.stringify(sharingError, null, 2),
-        );
-        // We might choose to continue or fail here. Let's fail for now to ensure visibility.
-        throw sharingError;
-      }
-
-      // 3. Save to database
-      let audio;
-      try {
-        console.log(
-          `[AudioService] Saving audio record to DB for userId: ${userId}`,
-        );
-        audio = await this.prisma.audio.create({
-          data: {
-            userId,
-            fileName: file.originalname,
-            originalS3Key: dropboxPath,
-            mimeType: file.mimetype,
-            fileSize: file.size,
-            sampleRate: 44100,
-            channels: 2,
-            processingStatus: 'UPLOADED',
-          },
-        });
-        console.log(`[AudioService] DB record created with ID: ${audio.id}`);
-      } catch (prismaError) {
-        console.error(
-          `[AudioService] Prisma failed to create audio record:`,
-          prismaError,
-        );
-        throw prismaError;
-      }
-
-      // 4. Clean up temp file
-      try {
-        if (fs.existsSync(file.path)) {
-          fs.unlinkSync(file.path);
-          console.log(`[AudioService] Cleaned up temp file: ${file.path}`);
-        }
-      } catch (cleanupError) {
-        console.warn(
-          `[AudioService] Failed to cleanup temp file at ${file.path}:`,
-          cleanupError,
-        );
-        // Don't throw here, the upload was successful
-      }
+      console.log(`[AudioService] DB record created with ID: ${audio.id}`);
 
       return {
-        audioId: audio.id,
-        dropboxUrl: sharedLinkResponse.result.url,
+        id: audio.id,
+        // No dropbox URL anymore. We return null or a local placeholder if needed.
+        dropboxUrl: null,
         status: 'uploaded',
       };
     } catch (totalError) {
@@ -141,6 +57,15 @@ export class AudioService {
         `[AudioService] FATAL ERROR during uploadAudio:`,
         totalError,
       );
+      // If DB creation fails, we should delete the file to avoid orphans
+      if (file && fs.existsSync(file.path)) {
+        try {
+          fs.unlinkSync(file.path);
+          console.log(`[AudioService] Cleaned up orphaned file: ${file.path}`);
+        } catch (e) {
+          console.warn(`[AudioService] Failed to cleanup orphaned file: ${e}`);
+        }
+      }
       throw totalError;
     }
   }
