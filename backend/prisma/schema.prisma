@@ -24,6 +24,8 @@ model Audio {
   processingStatus  ProcessingStatus @default(UPLOADED)
   uploadedAt        DateTime         @default(now())
   processedAt       DateTime?
+  title             String?
+  description       String?
 
   transcription Transcription?
   analysis      Analysis?

@@ -3,3 +3,8 @@ node_modules
 .env
 
 /generated/prisma
+
+# Local Storage & Logs
+uploads/*
+!uploads/.gitkeep
+*.log

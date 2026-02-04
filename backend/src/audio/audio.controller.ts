@@ -7,6 +7,8 @@ import {
   UploadedFile,
   Body,
   BadRequestException,
+  Patch,
+  Delete,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AudioService } from './audio.service';
@@ -54,5 +56,24 @@ export class AudioController {
   @Get(':id')
   async getAudio(@Param('id') id: string) {
     return this.audioService.getAudioById(id);
+  }
+
+  @Get('user/:userId')
+  async listAudios(@Param('userId') userId: string) {
+    return this.audioService.listAudios(userId);
+  }
+
+  @Patch(':id')
+  async updateAudio(
+    @Param('id') id: string,
+    @Body() data: { title?: string; description?: string },
+  ) {
+    return this.audioService.updateAudio(id, data);
+  }
+
+  @Delete(':id')
+  async deleteAudio(@Param('id') id: string) {
+    console.log(`[AudioController] DELETE request for id: ${id}`);
+    return this.audioService.deleteAudio(id);
   }
 }

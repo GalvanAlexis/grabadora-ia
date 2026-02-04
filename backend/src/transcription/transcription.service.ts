@@ -103,11 +103,33 @@ export class TranscriptionService {
     } catch (error) {
       console.error(`[TranscriptionService] Transcription failed:`, error);
 
-      // Update status to failed
-      await this.prisma.audio.update({
-        where: { id: audioId },
-        data: { processingStatus: 'FAILED' },
-      });
+      // AUTO DELETE ON FAILURE
+      // We need to inject AudioService to do this proper, but circular dependency might be an issue
+      // if AudioService depends on TranscriptionService.
+      // For now, let's manually delete the DB record and file to break potential cycles if not careful,
+      // OR better: Just mark logic here to call the same cleanup routine.
+
+      // Let's use the Prisma delete directly here to avoid circular dependency hell for now,
+      // duplicating the logic slightly but safe.
+      try {
+        // Hard delete from DB
+        await this.prisma.audio.delete({ where: { id: audioId } });
+
+        // Delete file
+        if (fs.existsSync(filePath)) {
+          try {
+            fs.unlinkSync(filePath);
+          } catch (e) {}
+        }
+        console.log(
+          `[TranscriptionService] Auto-deleted failed audio: ${audioId}`,
+        );
+      } catch (cleanupError) {
+        console.error(
+          `[TranscriptionService] Failed to cleanup after error:`,
+          cleanupError,
+        );
+      }
 
       throw error;
     }
