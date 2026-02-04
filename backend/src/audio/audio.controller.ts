@@ -68,6 +68,7 @@ export class AudioController {
     @Param('id') id: string,
     @Body() data: { title?: string; description?: string },
   ) {
+    console.log(`[AudioController] PATCH /audio/${id}`, data);
     return this.audioService.updateAudio(id, data);
   }
 

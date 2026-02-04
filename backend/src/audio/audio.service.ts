@@ -103,6 +103,7 @@ export class AudioService {
     id: string,
     data: { title?: string; description?: string },
   ) {
+    console.log(`[AudioService] Updating audio ${id}`, data);
     return this.prisma.audio.update({
       where: { id },
       data,
